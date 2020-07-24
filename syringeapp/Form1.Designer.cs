@@ -95,6 +95,7 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -143,6 +144,8 @@
             // 
             // portsToolStripMenuItem
             // 
+            this.portsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshToolStripMenuItem});
             this.portsToolStripMenuItem.Name = "portsToolStripMenuItem";
             this.portsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.portsToolStripMenuItem.Text = "Ports";
@@ -364,21 +367,21 @@
             // mLToolStripMenuItem3
             // 
             this.mLToolStripMenuItem3.Name = "mLToolStripMenuItem3";
-            this.mLToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.mLToolStripMenuItem3.Size = new System.Drawing.Size(106, 22);
             this.mLToolStripMenuItem3.Text = "20 mL";
             this.mLToolStripMenuItem3.Click += new System.EventHandler(this.mLToolStripMenuItem3_Click);
             // 
             // mLToolStripMenuItem4
             // 
             this.mLToolStripMenuItem4.Name = "mLToolStripMenuItem4";
-            this.mLToolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
+            this.mLToolStripMenuItem4.Size = new System.Drawing.Size(106, 22);
             this.mLToolStripMenuItem4.Text = "10 mL";
             this.mLToolStripMenuItem4.Click += new System.EventHandler(this.mLToolStripMenuItem4_Click);
             // 
             // mLToolStripMenuItem5
             // 
             this.mLToolStripMenuItem5.Name = "mLToolStripMenuItem5";
-            this.mLToolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.mLToolStripMenuItem5.Size = new System.Drawing.Size(106, 22);
             this.mLToolStripMenuItem5.Text = "5 mL";
             this.mLToolStripMenuItem5.Click += new System.EventHandler(this.mLToolStripMenuItem5_Click);
             // 
@@ -393,7 +396,7 @@
             // calibrateToolStripMenuItem
             // 
             this.calibrateToolStripMenuItem.Name = "calibrateToolStripMenuItem";
-            this.calibrateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.calibrateToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.calibrateToolStripMenuItem.Text = "Calibrate";
             this.calibrateToolStripMenuItem.Click += new System.EventHandler(this.calibrateToolStripMenuItem_Click);
             // 
@@ -686,6 +689,13 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Syringe Parameters";
             // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(509, 344);
@@ -783,6 +793,7 @@
         private System.Windows.Forms.ToolStripMenuItem changeVolumeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeVolumeToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem changeVolumeToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
     }
 }
 

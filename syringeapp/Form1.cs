@@ -18,6 +18,8 @@ namespace WindowsFormsApp1
         public static bool connected = false;
         public static bool ishomed = false;
         public static bool customaccel = false;
+        public static bool aspirated = false;
+        public static bool injected = false;
 
         public static char[] switchcode = { 'a', 'b', 'c', 'd', 'e' };
 
@@ -438,10 +440,10 @@ namespace WindowsFormsApp1
                                         {
                                             double movetoposition = position - outputposition;
                                             crntvlm = movetoposition * mlperstep;
-                                            crntvlm = Math.Round(crntvlm, 3, MidpointRounding.AwayFromZero);
+                                            crntvlm = Math.Round(crntvlm, 4, MidpointRounding.AwayFromZero);
 
                                             int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
-                                            position = position - actualposition;
+                                            //position = position - actualposition;
                                             string actpsn = actualposition.ToString();
 
                                             int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
@@ -504,12 +506,15 @@ namespace WindowsFormsApp1
                                                 port1.Write(switchcode, 2, 1);
                                                 byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
                                                 port1.Write(sendbytes, 0, sendbytes.Length);
+                                                watch.Reset();
+                                                watch.Start();
                                                 int interval = actualposition / actualrate;
                                                 timer.Interval = interval * 1000; // 
                                                 timer.Tick += timer_Tick;
                                                 timer.Start();
-                                                watch.Start();
+                                                
                                                 isPushedinj = true;
+                                                injected = true;
                                                 label12.Text = "Injecting";
                                                 button1.Enabled = false;
                                                 button3.Text = "Cancel";
@@ -547,18 +552,25 @@ namespace WindowsFormsApp1
                 {
                     port1.Write(switchcode, 3, 1);
                     button3.Text = "Inject";
-                    isPushedinj = false;
                     button1.Enabled = true;
                     button2.Enabled = true;
                     
                     button4.Enabled = true;
-                    long min = (watch.ElapsedMilliseconds / 1000) / 60;
+                    injected = false;
+                    long min = watch.ElapsedMilliseconds;
                     watch.Stop();
                     timer.Stop();
-                    crntvlm = rate * min;
-                    position = crntvlm /mlperstep;
+
+                    double ratepermilisec = rate / (1000 * 60);
+                    double vlm = ratepermilisec * min;
+                    double stepstaken = vlm / mlperstep;
+                    position = position - stepstaken;
+                    double newvlm = position * mlperstep;
+                    crntvlm = Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
+                    
                     label16.Text = crntvlm.ToString();
                     label12.Text = "Ready";
+                    isPushedinj = false;
                 }
             }
         }
@@ -710,17 +722,18 @@ namespace WindowsFormsApp1
                                 {
                                     outputrate = (rate / 60) / mlperstep;
                                     outputposition = vlm / mlperstep;
-                                    position = 0;
+                                    //position = 0;
                                     if (outputrate <= 100000)
                                     {
                                         if (position + outputposition <= maxsteps)
                                         {
-                                            double movetoposition = position + (outputposition - Properties.Settings.Default.factor1);
+                                            
+                                            double movetoposition = position + outputposition;
                                             crntvlm = movetoposition * mlperstep;
-                                            crntvlm = Math.Round(crntvlm, 3, MidpointRounding.AwayFromZero);
+                                            crntvlm = Math.Round(crntvlm, 4, MidpointRounding.AwayFromZero);
                                             //crntvlm = (int)Math.Round(dbcrntvlm, 0, MidpointRounding.AwayFromZero);
                                             int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
-                                            position = position + actualposition;
+                                            //position = position + actualposition;
                                             string actpsn = actualposition.ToString();
 
                                             int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
@@ -789,8 +802,10 @@ namespace WindowsFormsApp1
                                                 timer.Interval = interval * 1000; // here time in milliseconds
                                                 timer.Tick += timer_Tick;
                                                 timer.Start();
+                                                watch.Reset();
                                                 watch.Start();
                                                 isPushedasp = true;
+                                                aspirated = true;
                                                 label12.Text = "Aspirating";
                                                 button1.Enabled = false;
                                                 button2.Text = "Cancel";
@@ -829,18 +844,25 @@ namespace WindowsFormsApp1
 
                     port1.Write(switchcode, 3, 1);
                     button2.Text = "Aspirate";
-                    isPushedasp = false;
+                    aspirated = false;
                     button1.Enabled = true;
                     
                     button3.Enabled = true;
                     button4.Enabled = true;
-                    long min = (watch.ElapsedMilliseconds/1000)/60;
+                    long min = watch.ElapsedMilliseconds;
+                    double ratepermilisec = rate /( 1000 * 60);
+                    //MessageBox.Show(min.ToString());
                     watch.Stop();
                     timer.Stop();
-                    crntvlm = rate * min;
-                    position = crntvlm / mlperstep;
+                    
+                    double vlm = ratepermilisec * min;
+                    double stepstaken = vlm / mlperstep;
+                    position = position + stepstaken;
+                    double newvlm = position * mlperstep;
+                    crntvlm = Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
                     label16.Text = crntvlm.ToString();
                     label12.Text = "Ready";
+                    isPushedasp = false;
                 }
             }
         }
@@ -938,6 +960,14 @@ namespace WindowsFormsApp1
             label12.Text = "Ready";
             timer.Stop();
             watch.Stop();
+            if (aspirated) {
+                position = position + outputposition;
+                    }else if (injected)
+            {
+                position = position - outputposition;
+            }
+            aspirated = false;
+            injected = false;
         }
         
 
@@ -1159,6 +1189,57 @@ namespace WindowsFormsApp1
                 Properties.Settings.Default.Save();
 
                 MessageBox.Show("Calibration saved!");
+            }
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var coms = SerialPort.GetPortNames();
+            ToolStripMenuItem[] items = new ToolStripMenuItem[coms.Length];
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                items[i] = new ToolStripMenuItem();
+                items[i].Name = "dynamicItem" + i.ToString();
+                items[i].Tag = "specialData";
+                items[i].Text = coms[i];
+                items[i].Click += new EventHandler(PortMenuClickHandler);
+            }
+            for (int j=0; j<items.Length; j++) {
+                for (int v=0; v<portsToolStripMenuItem.DropDownItems.Count;v++) {
+                    if ((items[j].Text != portsToolStripMenuItem.DropDownItems[v].ToString())&&(portsToolStripMenuItem.DropDownItems[v].ToString()!="Refresh"))
+                    {
+                        portsToolStripMenuItem.DropDownItems.Add(items[j]);
+                    }
+                }
+            }
+            //portsToolStripMenuItem.DropDownItems.AddRange(items);
+
+            void PortMenuClickHandler(object sender2, EventArgs e2)
+            {
+                ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender2;
+
+                try
+                {
+                    port1.PortName = clickedItem.ToString();
+                    label6.Visible = true;
+                    label6.Text = clickedItem.ToString();
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        if (items[i] == clickedItem)
+                        {
+                            if (clickedItem.BackColor != System.Drawing.Color.LightGray)
+                            {
+                                clickedItem.BackColor = System.Drawing.Color.LightGray;
+                            }
+                        }
+                        else { items[i].BackColor = default(Color); };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }
