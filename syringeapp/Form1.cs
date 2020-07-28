@@ -109,7 +109,7 @@ namespace WindowsFormsApp1
             }
             var coms = SerialPort.GetPortNames();
             port1 = new SerialPort();
-            port1.ReadTimeout = 1000;
+            port1.ReadTimeout = 1500;
 
             ToolStripMenuItem[] items = new ToolStripMenuItem[coms.Length];
 
@@ -1206,8 +1206,8 @@ namespace WindowsFormsApp1
                 items[i].Click += new EventHandler(PortMenuClickHandler);
             }
             for (int j=0; j<items.Length; j++) {
-                for (int v=0; v<portsToolStripMenuItem.DropDownItems.Count;v++) {
-                    if ((items[j].Text != portsToolStripMenuItem.DropDownItems[v].ToString())&&(portsToolStripMenuItem.DropDownItems[v].ToString()!="Refresh"))
+                for (int v=1; v<portsToolStripMenuItem.DropDownItems.Count;v++) {
+                    if (items[j].Text != portsToolStripMenuItem.DropDownItems[v].ToString())
                     {
                         portsToolStripMenuItem.DropDownItems.Add(items[j]);
                     }
