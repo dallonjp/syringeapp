@@ -67,7 +67,7 @@ namespace WindowsFormsApp1
             innerDiameterToolStripMenuItem2.Text= "Inner Diamter= " + Properties.Settings.Default.defaultid3.ToString() + " mm";
             label5.Text="Disconnected";
             defaultStepsecToolStripMenuItem.Text = Properties.Settings.Default.accel.ToString();
-            label16.Text = crntvlm.ToString();
+            label16.Text = crntvlm.ToString() + " mL";
             switch (Properties.Settings.Default.microstp)
             {
                 case 1:
@@ -201,7 +201,7 @@ namespace WindowsFormsApp1
                         {
                             try
                             {
-                                //Thread.Sleep(1000);
+
                                 elapsed += 1000;
                                 byte[] data = new byte[1024];
                                 int bytesRead = port1.Read(data, 0, data.Length);
@@ -215,7 +215,8 @@ namespace WindowsFormsApp1
                                     label12.Visible = true;
                                     label12.Text = "Ready";
                                     label16.Visible = true;
-                                    label16.Text = "0";
+                                    label16.Text = "0" + " mL";
+
                                 }
 
                             }
@@ -235,7 +236,6 @@ namespace WindowsFormsApp1
                     }
                     if (!connected)
                     {
-                        //port1.WriteLine("goodbye arduino");
                         port1.Close();
                         
                         label5.Text = "Disconnected";
@@ -310,58 +310,58 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            if (textBox1.TextLength > 0)
-            {
-                radioButton1.Enabled = false;
-                radioButton2.Enabled = false;
-                radioButton3.Enabled = false;
-                string diameter = textBox1.Text;
-                double diam = ConvertToDouble(diameter);
-                double rad = diam / 2;
-                double area = System.Math.PI*System.Math.Pow(rad,2); //mm^2
-                mlperstep = mmperstep *area*System.Math.Pow(10,-3) * Properties.Settings.Default.factor4; 
-            }
-            else
-            {
-                radioButton1.Enabled = true;
-                radioButton2.Enabled = true;
-                radioButton3.Enabled = true;
-                mlperstep = -1;
-            }
-        }
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-            if (textBox4.TextLength > 0)
-            {
-                radioButton1.Enabled = false;
-                radioButton2.Enabled = false;
-                radioButton3.Enabled = false;
-                string vol = textBox4.Text;
-                double dvol = ConvertToDouble(vol);
-                if ((mlperstep != -1)&&(textBox1.TextLength>0))
-                {
-                    maxsteps = dvol / mlperstep;
-                }
-                else
-                {
-                    radioButton1.Enabled = true;
-                    radioButton2.Enabled = true;
-                    radioButton3.Enabled = true;
-                    maxsteps = -1;
-                    MessageBox.Show("Please specify custom syringe diameter first.");
-                    textBox4.Text = "";
-                }
-            }
-            else
-            {
-                radioButton1.Enabled = true;
-                radioButton2.Enabled = true;
-                radioButton3.Enabled = true;
-                maxsteps = -1;
-            }
-        }
+        //private void textBox1_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (textBox1.TextLength > 0)
+        //    {
+        //        radioButton1.Enabled = false;
+        //        radioButton2.Enabled = false;
+        //        radioButton3.Enabled = false;
+        //        string diameter = textBox1.Text;
+        //        double diam = ConvertToDouble(diameter);
+        //        double rad = diam / 2;
+        //        double area = System.Math.PI*System.Math.Pow(rad,2); //mm^2
+        //        mlperstep = mmperstep *area*System.Math.Pow(10,-3) * Properties.Settings.Default.factor4; 
+        //    }
+        //    else
+        //    {
+        //        radioButton1.Enabled = true;
+        //        radioButton2.Enabled = true;
+        //        radioButton3.Enabled = true;
+        //        mlperstep = -1;
+        //    }
+        //}
+        //private void textBox4_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (textBox4.TextLength > 0)
+        //    {
+        //        radioButton1.Enabled = false;
+        //        radioButton2.Enabled = false;
+        //        radioButton3.Enabled = false;
+        //        string vol = textBox4.Text;
+        //        double dvol = ConvertToDouble(vol);
+        //        if ((mlperstep != -1)&&(textBox1.TextLength>0))
+        //        {
+        //            maxsteps = dvol / mlperstep;
+        //        }
+        //        else
+        //        {
+        //            radioButton1.Enabled = true;
+        //            radioButton2.Enabled = true;
+        //            radioButton3.Enabled = true;
+        //            maxsteps = -1;
+        //            MessageBox.Show("Please specify custom syringe diameter first.");
+        //            textBox4.Text = "";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        radioButton1.Enabled = true;
+        //        radioButton2.Enabled = true;
+        //        radioButton3.Enabled = true;
+        //        maxsteps = -1;
+        //    }
+        //}
 
 
         private void button4_Click(object sender, EventArgs e)
@@ -388,7 +388,8 @@ namespace WindowsFormsApp1
                                 label12.Text = "Ready";
                                 position = 0;
                                 crntvlm = 0;
-                                label16.Text = crntvlm.ToString();
+                                label16.Text = crntvlm.ToString() + " mL";
+
                             }
                         }
                     }
@@ -532,7 +533,7 @@ namespace WindowsFormsApp1
                                         MessageBox.Show("Rate too high!");
                                     }
                                 }
-                                else { MessageBox.Show("Pump position not homed!"); }
+                                else { MessageBox.Show("Pump position not zeroed!"); }
                             }
                             else { MessageBox.Show("No Syringe Chosen!"); }
 
@@ -557,18 +558,19 @@ namespace WindowsFormsApp1
                     
                     button4.Enabled = true;
                     injected = false;
-                    long min = watch.ElapsedMilliseconds;
+                    long ms = watch.ElapsedMilliseconds;
                     watch.Stop();
                     timer.Stop();
 
                     double ratepermilisec = rate / (1000 * 60);
-                    double vlm = ratepermilisec * min;
+                    double vlm = ratepermilisec * ms;
                     double stepstaken = vlm / mlperstep;
                     position = position - stepstaken;
                     double newvlm = position * mlperstep;
                     crntvlm = Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
                     
-                    label16.Text = crntvlm.ToString();
+                    label16.Text = crntvlm.ToString() + " mL";
+                    textBox2.Text = crntvlm.ToString();
                     label12.Text = "Ready";
                     isPushedinj = false;
                 }
@@ -823,7 +825,7 @@ namespace WindowsFormsApp1
                                         MessageBox.Show("Rate too high!");
                                     }
                                 }
-                                else { MessageBox.Show("Pump position not homed!"); }
+                                else { MessageBox.Show("Pump position not zeroed!"); }
                             }
                             else { MessageBox.Show("No Syringe Chosen!"); }
 
@@ -849,18 +851,19 @@ namespace WindowsFormsApp1
                     
                     button3.Enabled = true;
                     button4.Enabled = true;
-                    long min = watch.ElapsedMilliseconds;
+                    long ms = watch.ElapsedMilliseconds;
                     double ratepermilisec = rate /( 1000 * 60);
                     //MessageBox.Show(min.ToString());
                     watch.Stop();
                     timer.Stop();
                     
-                    double vlm = ratepermilisec * min;
+                    double vlm = ratepermilisec * ms;
                     double stepstaken = vlm / mlperstep;
                     position = position + stepstaken;
                     double newvlm = position * mlperstep;
                     crntvlm = Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
-                    label16.Text = crntvlm.ToString();
+                    label16.Text = crntvlm.ToString()+" mL";
+                    textBox2.Text = crntvlm.ToString();
                     label12.Text = "Ready";
                     isPushedasp = false;
                 }
@@ -956,7 +959,8 @@ namespace WindowsFormsApp1
             isPushedinj = false;
             button2.Text = "Aspirate";
             button3.Text = "Inject";
-            label16.Text = crntvlm.ToString();
+            label16.Text = crntvlm.ToString() + " mL";
+            textBox2.Text = crntvlm.ToString();
             label12.Text = "Ready";
             timer.Stop();
             watch.Stop();
@@ -1004,6 +1008,12 @@ namespace WindowsFormsApp1
                 double newid = ConvertToDouble(usrinput);
                 Properties.Settings.Default.defaultid1 = newid;
                 Properties.Settings.Default.Save();
+                if (radioButton1.Checked == true)
+                {
+                    double area = Math.PI * Math.Pow(Properties.Settings.Default.defaultid1 / 2, 2);
+                    mlperstep = area * mmperstep * System.Math.Pow(10, -3) * Properties.Settings.Default.factor1;
+                    maxsteps = Properties.Settings.Default.defaultml1 / mlperstep;
+                }
                innerDiameterToolStripMenuItem.Text = "Inner diameter= " + newid.ToString() + " mm";
             }
         }
@@ -1016,6 +1026,12 @@ namespace WindowsFormsApp1
                 double newid = ConvertToDouble(usrinput);
                 Properties.Settings.Default.defaultid2 = newid;
                 Properties.Settings.Default.Save();
+                if (radioButton2.Checked == true)
+                {
+                    double area = Math.PI * Math.Pow(Properties.Settings.Default.defaultid2 / 2, 2);
+                    mlperstep = area * mmperstep * System.Math.Pow(10, -3) * Properties.Settings.Default.factor2;
+                    maxsteps = Properties.Settings.Default.defaultml2 / mlperstep;
+                }
                 innerDiameterToolStripMenuItem1.Text = "Inner diameter= " + newid.ToString() + " mm";
             }
         }
@@ -1028,6 +1044,12 @@ namespace WindowsFormsApp1
                 double newid = ConvertToDouble(usrinput);
                 Properties.Settings.Default.defaultid3 = newid;
                 Properties.Settings.Default.Save();
+                if (radioButton3.Checked == true)
+                {
+                    double area = Math.PI * Math.Pow(Properties.Settings.Default.defaultid3 / 2, 2);
+                    mlperstep = area * mmperstep * System.Math.Pow(10, -3) * Properties.Settings.Default.factor3;
+                    maxsteps = Properties.Settings.Default.defaultml3 / mlperstep;
+                }
                 innerDiameterToolStripMenuItem2.Text = "Inner diameter= " + newid.ToString() + " mm";
             }
         }
@@ -1105,8 +1127,8 @@ namespace WindowsFormsApp1
                 Properties.Settings.Default.defaultml2 = newid;
                 Properties.Settings.Default.Save();
                 mLToolStripMenuItem1.Text = Properties.Settings.Default.defaultml2.ToString() + " mL";
-                mLToolStripMenuItem4.Text = Properties.Settings.Default.defaultml1.ToString() + " mL";
-                radioButton2.Text = Properties.Settings.Default.defaultml1.ToString() + " mL";
+                mLToolStripMenuItem4.Text = Properties.Settings.Default.defaultml2.ToString() + " mL";
+                radioButton2.Text = Properties.Settings.Default.defaultml2.ToString() + " mL";
             }
         }
 
@@ -1119,8 +1141,8 @@ namespace WindowsFormsApp1
                 Properties.Settings.Default.defaultml3 = newid;
                 Properties.Settings.Default.Save();
                 mLToolStripMenuItem2.Text = Properties.Settings.Default.defaultml3.ToString() + " mL";
-                mLToolStripMenuItem5.Text = Properties.Settings.Default.defaultml1.ToString() + " mL";
-                radioButton3.Text = Properties.Settings.Default.defaultml1.ToString() + " mL";
+                mLToolStripMenuItem5.Text = Properties.Settings.Default.defaultml3.ToString() + " mL";
+                radioButton3.Text = Properties.Settings.Default.defaultml3.ToString() + " mL";
             }
         }
 

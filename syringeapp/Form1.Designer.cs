@@ -34,6 +34,7 @@
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.portsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.baudrateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,8 +65,6 @@
             this.mLToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.mLToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.mLToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-            this.customSyringeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.calibrateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -89,17 +88,16 @@
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -110,7 +108,7 @@
             this.calibrationToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(509, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(868, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -147,8 +145,15 @@
             this.portsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.refreshToolStripMenuItem});
             this.portsToolStripMenuItem.Name = "portsToolStripMenuItem";
-            this.portsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.portsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.portsToolStripMenuItem.Text = "Ports";
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // baudrateToolStripMenuItem
             // 
@@ -156,20 +161,20 @@
             this.toolStripMenuItem2,
             this.toolStripMenuItem3});
             this.baudrateToolStripMenuItem.Name = "baudrateToolStripMenuItem";
-            this.baudrateToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.baudrateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.baudrateToolStripMenuItem.Text = "Baudrate";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem2.Text = "9600";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem3.Text = "115200";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
@@ -179,7 +184,7 @@
             this.accelerationToolStripMenuItem,
             this.rotationPerStepdegreesToolStripMenuItem});
             this.stepperToolStripMenuItem.Name = "stepperToolStripMenuItem";
-            this.stepperToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.stepperToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stepperToolStripMenuItem.Text = "Stepper";
             // 
             // accelerationToolStripMenuItem
@@ -193,7 +198,7 @@
             // defaultStepsecToolStripMenuItem
             // 
             this.defaultStepsecToolStripMenuItem.Name = "defaultStepsecToolStripMenuItem";
-            this.defaultStepsecToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.defaultStepsecToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.defaultStepsecToolStripMenuItem.Text = "3000";
             this.defaultStepsecToolStripMenuItem.Click += new System.EventHandler(this.defaultToolStripMenuItem_Click);
             // 
@@ -211,7 +216,7 @@
             this.mLToolStripMenuItem1,
             this.mLToolStripMenuItem2});
             this.defaultSyringesToolStripMenuItem.Name = "defaultSyringesToolStripMenuItem";
-            this.defaultSyringesToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.defaultSyringesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.defaultSyringesToolStripMenuItem.Text = "Default Syringes";
             // 
             // mLToolStripMenuItem
@@ -220,7 +225,7 @@
             this.innerDiameterToolStripMenuItem,
             this.changeVolumeToolStripMenuItem});
             this.mLToolStripMenuItem.Name = "mLToolStripMenuItem";
-            this.mLToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.mLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mLToolStripMenuItem.Text = "20 mL";
             // 
             // innerDiameterToolStripMenuItem
@@ -243,7 +248,7 @@
             this.innerDiameterToolStripMenuItem1,
             this.changeVolumeToolStripMenuItem1});
             this.mLToolStripMenuItem1.Name = "mLToolStripMenuItem1";
-            this.mLToolStripMenuItem1.Size = new System.Drawing.Size(106, 22);
+            this.mLToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.mLToolStripMenuItem1.Text = "10 mL";
             // 
             // innerDiameterToolStripMenuItem1
@@ -266,7 +271,7 @@
             this.innerDiameterToolStripMenuItem2,
             this.changeVolumeToolStripMenuItem2});
             this.mLToolStripMenuItem2.Name = "mLToolStripMenuItem2";
-            this.mLToolStripMenuItem2.Size = new System.Drawing.Size(106, 22);
+            this.mLToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.mLToolStripMenuItem2.Text = "5 mL";
             // 
             // innerDiameterToolStripMenuItem2
@@ -288,13 +293,13 @@
             this.acuatorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pitchToolStripMenuItem});
             this.acuatorToolStripMenuItem.Name = "acuatorToolStripMenuItem";
-            this.acuatorToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.acuatorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.acuatorToolStripMenuItem.Text = "Actuator";
             // 
             // pitchToolStripMenuItem
             // 
             this.pitchToolStripMenuItem.Name = "pitchToolStripMenuItem";
-            this.pitchToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.pitchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.pitchToolStripMenuItem.Text = "Pitch";
             this.pitchToolStripMenuItem.Click += new System.EventHandler(this.pitchToolStripMenuItem_Click);
             // 
@@ -307,49 +312,48 @@
             this.eighthToolStripMenuItem,
             this.sixteenthToolStripMenuItem});
             this.microsteppingToolStripMenuItem.Name = "microsteppingToolStripMenuItem";
-            this.microsteppingToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.microsteppingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.microsteppingToolStripMenuItem.Text = "Microstepping";
             // 
             // fullToolStripMenuItem
             // 
             this.fullToolStripMenuItem.Name = "fullToolStripMenuItem";
-            this.fullToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.fullToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fullToolStripMenuItem.Text = "Full";
             this.fullToolStripMenuItem.Click += new System.EventHandler(this.fullToolStripMenuItem_Click);
             // 
             // halfToolStripMenuItem
             // 
             this.halfToolStripMenuItem.Name = "halfToolStripMenuItem";
-            this.halfToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.halfToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.halfToolStripMenuItem.Text = "Half";
             this.halfToolStripMenuItem.Click += new System.EventHandler(this.halfToolStripMenuItem_Click);
             // 
             // quarterToolStripMenuItem
             // 
             this.quarterToolStripMenuItem.Name = "quarterToolStripMenuItem";
-            this.quarterToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.quarterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.quarterToolStripMenuItem.Text = "Quarter";
             this.quarterToolStripMenuItem.Click += new System.EventHandler(this.quarterToolStripMenuItem_Click);
             // 
             // eighthToolStripMenuItem
             // 
             this.eighthToolStripMenuItem.Name = "eighthToolStripMenuItem";
-            this.eighthToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.eighthToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.eighthToolStripMenuItem.Text = "Eighth";
             this.eighthToolStripMenuItem.Click += new System.EventHandler(this.eighthToolStripMenuItem_Click);
             // 
             // sixteenthToolStripMenuItem
             // 
             this.sixteenthToolStripMenuItem.Name = "sixteenthToolStripMenuItem";
-            this.sixteenthToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.sixteenthToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sixteenthToolStripMenuItem.Text = "Sixteenth";
             this.sixteenthToolStripMenuItem.Click += new System.EventHandler(this.sixteenthToolStripMenuItem_Click);
             // 
             // calibrationToolStripMenuItem
             // 
             this.calibrationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.defaultSyringesToolStripMenuItem1,
-            this.customSyringeToolStripMenuItem});
+            this.defaultSyringesToolStripMenuItem1});
             this.calibrationToolStripMenuItem.Name = "calibrationToolStripMenuItem";
             this.calibrationToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
             this.calibrationToolStripMenuItem.Text = "Calibration";
@@ -361,49 +365,34 @@
             this.mLToolStripMenuItem4,
             this.mLToolStripMenuItem5});
             this.defaultSyringesToolStripMenuItem1.Name = "defaultSyringesToolStripMenuItem1";
-            this.defaultSyringesToolStripMenuItem1.Size = new System.Drawing.Size(159, 22);
+            this.defaultSyringesToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.defaultSyringesToolStripMenuItem1.Text = "Default Syringes";
             // 
             // mLToolStripMenuItem3
             // 
             this.mLToolStripMenuItem3.Name = "mLToolStripMenuItem3";
-            this.mLToolStripMenuItem3.Size = new System.Drawing.Size(106, 22);
+            this.mLToolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
             this.mLToolStripMenuItem3.Text = "20 mL";
             this.mLToolStripMenuItem3.Click += new System.EventHandler(this.mLToolStripMenuItem3_Click);
             // 
             // mLToolStripMenuItem4
             // 
             this.mLToolStripMenuItem4.Name = "mLToolStripMenuItem4";
-            this.mLToolStripMenuItem4.Size = new System.Drawing.Size(106, 22);
+            this.mLToolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
             this.mLToolStripMenuItem4.Text = "10 mL";
             this.mLToolStripMenuItem4.Click += new System.EventHandler(this.mLToolStripMenuItem4_Click);
             // 
             // mLToolStripMenuItem5
             // 
             this.mLToolStripMenuItem5.Name = "mLToolStripMenuItem5";
-            this.mLToolStripMenuItem5.Size = new System.Drawing.Size(106, 22);
+            this.mLToolStripMenuItem5.Size = new System.Drawing.Size(180, 22);
             this.mLToolStripMenuItem5.Text = "5 mL";
             this.mLToolStripMenuItem5.Click += new System.EventHandler(this.mLToolStripMenuItem5_Click);
-            // 
-            // customSyringeToolStripMenuItem
-            // 
-            this.customSyringeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.calibrateToolStripMenuItem});
-            this.customSyringeToolStripMenuItem.Name = "customSyringeToolStripMenuItem";
-            this.customSyringeToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.customSyringeToolStripMenuItem.Text = "Custom Syringe";
-            // 
-            // calibrateToolStripMenuItem
-            // 
-            this.calibrateToolStripMenuItem.Name = "calibrateToolStripMenuItem";
-            this.calibrateToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-            this.calibrateToolStripMenuItem.Text = "Calibrate";
-            this.calibrateToolStripMenuItem.Click += new System.EventHandler(this.calibrateToolStripMenuItem_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(173, 65);
+            this.label1.Location = new System.Drawing.Point(165, 75);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 1;
@@ -412,7 +401,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(114, 38);
+            this.label2.Location = new System.Drawing.Point(106, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 2;
@@ -421,7 +410,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(114, 65);
+            this.label3.Location = new System.Drawing.Point(106, 75);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 13);
             this.label3.TabIndex = 3;
@@ -430,7 +419,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(114, 93);
+            this.label4.Location = new System.Drawing.Point(106, 103);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 13);
             this.label4.TabIndex = 4;
@@ -439,7 +428,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(173, 93);
+            this.label5.Location = new System.Drawing.Point(165, 103);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 5;
@@ -448,7 +437,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(173, 37);
+            this.label6.Location = new System.Drawing.Point(165, 47);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 6;
@@ -456,16 +445,18 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(20, 37);
+            this.button1.Location = new System.Drawing.Point(12, 47);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(76, 48);
+            this.button1.Size = new System.Drawing.Size(88, 48);
             this.button1.TabIndex = 7;
-            this.button1.Text = "Connect";
+            this.button1.Text = "Serial Connect";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.pictureBox2);
+            this.groupBox2.Controls.Add(this.pictureBox1);
             this.groupBox2.Controls.Add(this.groupBox3);
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.label9);
@@ -476,10 +467,10 @@
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Location = new System.Drawing.Point(20, 161);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(477, 171);
+            this.groupBox2.Size = new System.Drawing.Size(514, 236);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Control";
+            this.groupBox2.Text = "Stepper Control";
             // 
             // groupBox3
             // 
@@ -487,7 +478,7 @@
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Controls.Add(this.label15);
-            this.groupBox3.Location = new System.Drawing.Point(137, 15);
+            this.groupBox3.Location = new System.Drawing.Point(144, 19);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(200, 82);
             this.groupBox3.TabIndex = 13;
@@ -497,7 +488,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 20);
+            this.label11.Location = new System.Drawing.Point(48, 20);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(37, 13);
             this.label11.TabIndex = 7;
@@ -533,7 +524,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(31, 75);
+            this.label10.Location = new System.Drawing.Point(31, 83);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(74, 13);
             this.label10.TabIndex = 6;
@@ -550,7 +541,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(31, 91);
+            this.textBox3.Location = new System.Drawing.Point(31, 99);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 4;
@@ -564,17 +555,17 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(343, 19);
+            this.button4.Location = new System.Drawing.Point(360, 24);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(128, 34);
             this.button4.TabIndex = 2;
-            this.button4.Text = "Home";
+            this.button4.Text = "Zero Position";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(31, 121);
+            this.button3.Location = new System.Drawing.Point(31, 182);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(128, 34);
             this.button3.TabIndex = 1;
@@ -584,7 +575,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(169, 121);
+            this.button2.Location = new System.Drawing.Point(189, 182);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(128, 34);
             this.button2.TabIndex = 0;
@@ -595,7 +586,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(174, 16);
+            this.radioButton1.Location = new System.Drawing.Point(10, 31);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(54, 17);
             this.radioButton1.TabIndex = 0;
@@ -607,7 +598,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(174, 39);
+            this.radioButton2.Location = new System.Drawing.Point(80, 31);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(54, 17);
             this.radioButton2.TabIndex = 1;
@@ -619,7 +610,7 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(174, 62);
+            this.radioButton3.Location = new System.Drawing.Point(151, 31);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(48, 17);
             this.radioButton3.TabIndex = 2;
@@ -628,77 +619,49 @@
             this.radioButton3.UseVisualStyleBackColor = true;
             this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 26);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(78, 13);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "Custom syringe";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(9, 48);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(45, 20);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(60, 51);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(101, 13);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "Inner Diameter (mm)";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(9, 75);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(45, 20);
-            this.textBox4.TabIndex = 6;
-            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(60, 78);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 13);
-            this.label13.TabIndex = 7;
-            this.label13.Text = "Volume (mL)";
-            this.label13.Click += new System.EventHandler(this.mL);
-            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label13);
-            this.groupBox1.Controls.Add(this.textBox4);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(263, 37);
+            this.groupBox1.Location = new System.Drawing.Point(280, 47);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(234, 100);
+            this.groupBox1.Size = new System.Drawing.Size(254, 69);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Syringe Parameters";
+            this.groupBox1.Text = "Syringe Volume";
             // 
-            // refreshToolStripMenuItem
+            // pictureBox2
             // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            this.pictureBox2.Image = global::WindowsFormsApp1.Properties.Resources.syringe22;
+            this.pictureBox2.Location = new System.Drawing.Point(189, 142);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(128, 34);
+            this.pictureBox2.TabIndex = 15;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::WindowsFormsApp1.Properties.Resources.syringe11;
+            this.pictureBox1.Location = new System.Drawing.Point(31, 142);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(128, 34);
+            this.pictureBox1.TabIndex = 14;
+            this.pictureBox1.TabStop = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Location = new System.Drawing.Point(569, 161);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(276, 236);
+            this.groupBox4.TabIndex = 10;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Timed Volume Control";
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(509, 344);
+            this.ClientSize = new System.Drawing.Size(868, 412);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
@@ -720,6 +683,8 @@
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -757,11 +722,6 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ToolStripMenuItem stepperToolStripMenuItem;
@@ -788,12 +748,13 @@
         private System.Windows.Forms.ToolStripMenuItem mLToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem mLToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem mLToolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem customSyringeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem calibrateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeVolumeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeVolumeToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem changeVolumeToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }
 
