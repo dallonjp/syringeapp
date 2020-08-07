@@ -4,6 +4,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 using System.Threading;
 using System.Text;
+using System.ComponentModel;
 using System.Globalization;
 
 namespace WindowsFormsApp1
@@ -15,13 +16,14 @@ namespace WindowsFormsApp1
         public static bool isPushed = false;
         public static bool isPushedasp = false;
         public static bool isPushedinj = false;
+        public static bool isPushedtimedinj = false;
         public static bool connected = false;
         public static bool ishomed = false;
         public static bool customaccel = false;
         public static bool aspirated = false;
         public static bool injected = false;
 
-        public static char[] switchcode = { 'a', 'b', 'c', 'd', 'e' };
+        public static char[] switchcode = { 'a', 'b', 'c', 'd', 'e','f' };
 
         public static double mmperstep = Properties.Settings.Default.pitch / ((360/Properties.Settings.Default.degree) * Properties.Settings.Default.microstp);
         public static double mlperstep=-1;
@@ -33,6 +35,10 @@ namespace WindowsFormsApp1
         public static double customsyrngevlm;
         public static double maxsteps=-1;
         public static double crntvlm = 0;
+        public static double minutes = 0;
+        public static double periodms;
+        public static double intervalms;
+        
 
         public static string contrt;
         public static string contpsn;
@@ -40,7 +46,9 @@ namespace WindowsFormsApp1
         public static string usrinput;
         public static string accelsend;
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer timer2 = new System.Windows.Forms.Timer();
         System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        System.Diagnostics.Stopwatch watch2 = new System.Diagnostics.Stopwatch();
         public Form1()
         {
             InitializeComponent();
@@ -66,6 +74,9 @@ namespace WindowsFormsApp1
             innerDiameterToolStripMenuItem1.Text= "Inner Diamter= " + Properties.Settings.Default.defaultid2.ToString() + " mm";
             innerDiameterToolStripMenuItem2.Text= "Inner Diamter= " + Properties.Settings.Default.defaultid3.ToString() + " mm";
             label5.Text="Disconnected";
+            label5.Refresh();
+            label17.Visible = false;
+            label14.Visible = false;
             defaultStepsecToolStripMenuItem.Text = Properties.Settings.Default.accel.ToString();
             label16.Text = crntvlm.ToString() + " mL";
             switch (Properties.Settings.Default.microstp)
@@ -189,7 +200,9 @@ namespace WindowsFormsApp1
                 {
                     label5.Text = "Connecting";
                     label1.Visible = true;
+                    label5.Refresh();
                     label1.Text = port1.BaudRate.ToString();
+                    label1.Refresh();
                     port1.Open();
                     try
                     {
@@ -211,6 +224,7 @@ namespace WindowsFormsApp1
                                     button1.Text = "Disconnect";
                                     isPushed = true;
                                     label5.Text = "Connected";
+                                    label5.Refresh();
                                     connected = true;
                                     label12.Visible = true;
                                     label12.Text = "Ready";
@@ -223,6 +237,7 @@ namespace WindowsFormsApp1
                             catch (Exception ex){
                                 MessageBox.Show(ex.Message);
                                 label5.Text = "Disconnected";
+                                label5.Refresh();
                                 break;
                             }
                         }
@@ -233,12 +248,14 @@ namespace WindowsFormsApp1
                     {
                         MessageBox.Show(ex.Message);
                         label5.Text = "Disconnected";
+                        label5.Refresh();
                     }
                     if (!connected)
                     {
                         port1.Close();
                         
                         label5.Text = "Disconnected";
+                        label5.Refresh();
                         isPushed = false;
                         button1.Text = "Connect";
                         label1.Visible = false;
@@ -250,6 +267,7 @@ namespace WindowsFormsApp1
                 {
                     MessageBox.Show(ex.Message);
                     label5.Text = "Disconnected";
+                    label5.Refresh();
                 }
             }
             else
@@ -258,6 +276,7 @@ namespace WindowsFormsApp1
                 button1.Text = "Connect";
                 isPushed = false;
                 label5.Text = "Disconnected";
+                label5.Refresh();
                 label1.Visible = false;
                 connected = false;
                 label16.Visible = false;
@@ -440,8 +459,7 @@ namespace WindowsFormsApp1
                                         if (position - outputposition >= 0)
                                         {
                                             double movetoposition = position - outputposition;
-                                            crntvlm = movetoposition * mlperstep;
-                                            crntvlm = Math.Round(crntvlm, 4, MidpointRounding.AwayFromZero);
+                                            
 
                                             int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
                                             //position = position - actualposition;
@@ -516,11 +534,16 @@ namespace WindowsFormsApp1
                                                 
                                                 isPushedinj = true;
                                                 injected = true;
+                                                label16.Visible = true;
+                                                label12.Visible = true;
                                                 label12.Text = "Injecting";
                                                 button1.Enabled = false;
                                                 button3.Text = "Cancel";
                                                 button2.Enabled = false;
                                                 button4.Enabled = false;
+                                                button5.Enabled = false;
+                                                button6.Enabled = false;
+                                                button7.Enabled = false;
                                             }
                                         }
                                         else
@@ -555,7 +578,11 @@ namespace WindowsFormsApp1
                     button3.Text = "Inject";
                     button1.Enabled = true;
                     button2.Enabled = true;
-                    
+                    button3.Enabled = true;
+                    button4.Enabled = true;
+                    button5.Enabled = true;
+                    button6.Enabled = true;
+                    button7.Enabled = true;
                     button4.Enabled = true;
                     injected = false;
                     long ms = watch.ElapsedMilliseconds;
@@ -720,9 +747,9 @@ namespace WindowsFormsApp1
 
                             if ((mlperstep != -1) && (maxsteps != -1))
                             {
-                                if (ishomed)
-                                {
-                                    outputrate = (rate / 60) / mlperstep;
+                            if (ishomed)
+                            {
+                                outputrate = (rate / 60) / mlperstep;
                                     outputposition = vlm / mlperstep;
                                     //position = 0;
                                     if (outputrate <= 100000)
@@ -731,11 +758,9 @@ namespace WindowsFormsApp1
                                         {
                                             
                                             double movetoposition = position + outputposition;
-                                            crntvlm = movetoposition * mlperstep;
-                                            crntvlm = Math.Round(crntvlm, 4, MidpointRounding.AwayFromZero);
-                                            //crntvlm = (int)Math.Round(dbcrntvlm, 0, MidpointRounding.AwayFromZero);
+                                            
                                             int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
-                                            //position = position + actualposition;
+                                            
                                             string actpsn = actualposition.ToString();
 
                                             int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
@@ -795,24 +820,33 @@ namespace WindowsFormsApp1
                                             if ((contpsn.Length == 8) && (contrt.Length == 7))
                                             {
                                                 sendit = contpsn + contrt + "x1";
+                                                
                                                 port1.Write(switchcode, 2, 1);
-                                                
-                                                byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
-                                                port1.Write(sendbytes, 0, sendbytes.Length);
-                                                
-                                                int interval = actualposition / actualrate;
-                                                timer.Interval = interval * 1000; // here time in milliseconds
-                                                timer.Tick += timer_Tick;
-                                                timer.Start();
-                                                watch.Reset();
-                                                watch.Start();
                                                 isPushedasp = true;
                                                 aspirated = true;
+
                                                 label12.Text = "Aspirating";
                                                 button1.Enabled = false;
                                                 button2.Text = "Cancel";
                                                 button3.Enabled = false;
                                                 button4.Enabled = false;
+                                                button5.Enabled = false;
+                                                button6.Enabled = false;
+                                                button7.Enabled = false;
+                                                label16.Visible = true;
+                                                label12.Visible = true;
+                                                byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
+                                                port1.Write(sendbytes, 0, sendbytes.Length);
+                                                watch.Reset();
+                                                watch.Start();
+                                                intervalms = (actualposition / actualrate)*1000;
+                                   
+                                                timer.Interval = 1; // here time in milliseconds
+                                                timer.Tick += timer_Tick;
+                                                timer.Start();
+                                                
+                                                
+                                                
                                             }
                                         }
                                         else
@@ -824,9 +858,9 @@ namespace WindowsFormsApp1
                                     {
                                         MessageBox.Show("Rate too high!");
                                     }
-                                }
-                                else { MessageBox.Show("Pump position not zeroed!"); }
-                            }
+                        }
+                        else { MessageBox.Show("Pump position not zeroed!"); }
+                    }
                             else { MessageBox.Show("No Syringe Chosen!"); }
 
                         }
@@ -848,9 +882,12 @@ namespace WindowsFormsApp1
                     button2.Text = "Aspirate";
                     aspirated = false;
                     button1.Enabled = true;
-                    
+                    button2.Enabled = true;
                     button3.Enabled = true;
                     button4.Enabled = true;
+                    button5.Enabled = true;
+                    button6.Enabled = true;
+                    button7.Enabled = true;
                     long ms = watch.ElapsedMilliseconds;
                     double ratepermilisec = rate /( 1000 * 60);
                     //MessageBox.Show(min.ToString());
@@ -951,29 +988,108 @@ namespace WindowsFormsApp1
         }
         void timer_Tick(object sender, System.EventArgs e)
         {
-            button1.Enabled = true;
-            button2.Enabled = true;
-            button3.Enabled = true;
-            button4.Enabled = true;
-            isPushedasp = false;
-            isPushedinj = false;
-            button2.Text = "Aspirate";
-            button3.Text = "Inject";
-            label16.Text = crntvlm.ToString() + " mL";
-            textBox2.Text = crntvlm.ToString();
-            label12.Text = "Ready";
-            timer.Stop();
-            watch.Stop();
-            if (aspirated) {
-                position = position + outputposition;
-                    }else if (injected)
+            if (watch.ElapsedMilliseconds < intervalms)
             {
-                position = position - outputposition;
+
+                double timedrate = vlm / intervalms;
+                long ms = watch.ElapsedMilliseconds;
+                double newvlm = timedrate * ms;
+                Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
+                
+                //MessageBox.Show(difvlm.ToString());
+                if (aspirated)
+                {
+                    double displayvlm = crntvlm + newvlm;
+                    Math.Round(displayvlm, 4, MidpointRounding.AwayFromZero);
+                    label16.Text = displayvlm.ToString() + " mL";
+                    label16.Refresh();
+                }
+                else if (injected)
+                {
+                    double displayvlm = crntvlm - newvlm;
+                    Math.Round(displayvlm, 4, MidpointRounding.AwayFromZero);
+                    label16.Text = displayvlm.ToString() + " mL";
+                    label16.Refresh();
+                }
             }
-            aspirated = false;
-            injected = false;
+            else
+            {
+                button1.Enabled = true;
+                button2.Enabled = true;
+                button3.Enabled = true;
+                button4.Enabled = true;
+                button5.Enabled = true;
+                button6.Enabled = true;
+                button7.Enabled = true;
+                isPushedasp = false;
+                isPushedinj = false;
+                button2.Text = "Aspirate";
+                button3.Text = "Inject";
+                
+                label12.Text = "Ready";
+                timer.Stop();
+                watch.Stop();
+                if (aspirated)
+                {
+                    position = position + outputposition;
+                    crntvlm = position * mlperstep;
+                    label16.Text = crntvlm.ToString() + " mL";
+                    textBox2.Text = crntvlm.ToString();
+                }
+                else if (injected)
+                {
+                    position = position - outputposition;
+                    crntvlm = position * mlperstep;
+                    label16.Text = crntvlm.ToString() + " mL";
+                    textBox2.Text = crntvlm.ToString();
+                }
+                aspirated = false;
+                injected = false;
+            }
         }
-        
+        void timer_Tick2(object sender, System.EventArgs e)
+        {
+            if (watch2.ElapsedMilliseconds < intervalms)
+            {
+                double timedrate = vlm / intervalms;
+                long ms = watch2.ElapsedMilliseconds;
+                double newvlm = timedrate * ms;
+                double crntvlm = Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
+                label17.Text = crntvlm.ToString() + " mL";
+                label17.Refresh();
+                double timepassed = ms / 60000;
+                double timeleft = (intervalms / 60000) - timepassed;
+                timeleft = Math.Round(timeleft, 6, MidpointRounding.AwayFromZero);
+                label14.Text = timeleft.ToString() + " min";
+                label14.Refresh();
+            }
+            else
+            {
+                button1.Enabled = true;
+                button2.Enabled = true;
+                button3.Enabled = true;
+                button4.Enabled = true;
+                button6.Enabled = true;
+                button7.Enabled = true;
+                isPushedtimedinj = false;
+                button5.Text = "Start";
+                label12.Text = "Ready";
+                double timedrate = vlm / intervalms;
+                long ms = watch2.ElapsedMilliseconds;
+                double newvlm = timedrate * ms;
+                timer2.Stop();
+                watch2.Stop();
+                double stepstaken = newvlm / mlperstep;
+                position = --stepstaken;
+                double newvlm2 = position * mlperstep;
+                crntvlm = Math.Round(newvlm2, 4, MidpointRounding.AwayFromZero);
+                label16.Visible = true;
+                label16.Text = crntvlm.ToString() + " mL";
+                label17.Visible = false;
+                label14.Visible = false;
+            }
+        }
+
 
         private void rotationPerStepdegreesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1274,5 +1390,183 @@ namespace WindowsFormsApp1
         {
 
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            
+            if (connected)
+            {
+                if (!isPushedtimedinj)
+                {
+                    if ((textBox1.TextLength > 0) && (textBox4.TextLength > 0))
+                    {
+                        vlm = ConvertToDouble(textBox1.Text);
+                        minutes = ConvertToDouble(textBox4.Text);
+                        
+                        try
+                        {
+                            if ((mlperstep != -1) && (maxsteps != -1))
+                            {
+                            if (ishomed)
+                            {
+                                outputposition = vlm / mlperstep;
+                                    double periodmin = (minutes/outputposition);
+                                    periodms = periodmin * 60000;
+                                    intervalms = minutes * 60000;
+                                    periodms = (int)Math.Round(periodms, 0, MidpointRounding.AwayFromZero);
+                                    int intervalmsrnd = (int)Math.Round(intervalms, 0, MidpointRounding.AwayFromZero);
+                                    if ((periodms >= 1) && (intervalms<99999999))
+                                    {
+                                        if (position - outputposition >= 0)
+                                        {
+                                            double movetoposition = position - outputposition;
+                                            
+                                            string actperiodms = periodms.ToString();
+                                            string actinterval = intervalmsrnd.ToString();
+                                            if (actperiodms.Length == 8)
+                                            {
+                                                contpsn = "x0" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 7)
+                                            {
+                                                contpsn = "x00" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 6)
+                                            {
+                                                contpsn = "x000" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 5)
+                                            {
+                                                contpsn = "x0000" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 4)
+                                            {
+                                                contpsn = "x00000" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 3)
+                                            {
+                                                contpsn = "x000000" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 2)
+                                            {
+                                                contpsn = "x0000000" + actperiodms;
+                                            }
+                                            else if (actperiodms.Length == 1)
+                                            {
+                                                contpsn = "x00000000" + actperiodms;
+                                            }
+
+                                            if (actinterval.Length == 8)
+                                            {
+                                                contrt = "v0" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 7)
+                                            {
+                                                contrt = "v00" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 6)
+                                            {
+                                                contrt = "v000" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 5)
+                                            {
+                                                contrt = "v0000" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 4)
+                                            {
+                                                contrt = "v00000" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 3)
+                                            {
+                                                contrt = "v000000" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 2)
+                                            {
+                                                contrt = "v0000000" + actinterval;
+                                            }
+                                            else if (actinterval.Length == 1)
+                                            {
+                                                contrt = "v00000000" + actinterval;
+                                            }
+                                            if ((contpsn.Length == 10) && (contrt.Length == 10))
+                                            {
+                                                sendit = contpsn + contrt;
+                                                port1.Write(switchcode, 5, 1);
+
+                                                byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
+                                                port1.Write(sendbytes, 0, sendbytes.Length);
+                                                watch2.Reset();
+                                                watch2.Start();
+                                                
+                                                timer2.Interval = (int)periodms; // 
+                                                timer2.Tick += timer_Tick2;
+                                                timer2.Start();
+                                                
+                                                isPushedtimedinj = true;
+                                                label12.Text = "Injecting";
+                                                button1.Enabled = false;
+                                                button3.Enabled = false;
+                                                button5.Text = "Cancel";
+                                                button2.Enabled = false;
+                                                button4.Enabled = false;
+                                                button6.Enabled = false;
+                                                button7.Enabled = false;
+                                                label17.Visible = true;
+                                                label14.Visible = true;
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Injected volume would be bigger than current volume! :(");
+                                        }
+                                    }
+                                    else { MessageBox.Show("Invalid time"); }
+                                    }
+                                else { MessageBox.Show("Pump position not zeroed!"); }
+                            }
+                            else { MessageBox.Show("No Syringe Chosen!"); }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid Input");
+                    }
+                }
+                else
+                {
+                    port1.Write(switchcode, 3, 1);
+                    button5.Text = "Start";
+                    button1.Enabled = true;
+                    button2.Enabled = true;
+                    button3.Enabled = true;
+                    button4.Enabled = true;
+                    button6.Enabled = true;
+                    button7.Enabled = true;
+                    isPushedtimedinj = false;                    
+                    label12.Text = "Ready";
+                    double timedrate = vlm / intervalms;
+                    long ms = watch2.ElapsedMilliseconds;
+                    double newvlm = timedrate * ms;
+                    timer2.Stop();
+                    watch2.Stop();
+                    
+                    double stepstaken = newvlm / mlperstep;
+                    position = -- stepstaken;
+                    double newvlm2 = position * mlperstep;
+                    crntvlm = Math.Round(newvlm2, 4, MidpointRounding.AwayFromZero);
+                    label16.Visible = true;
+                    label16.Text = crntvlm.ToString() + " mL";
+                    label17.Visible = false;
+                    label14.Visible = false;
+                }
+
+            }
+        }
+
     }
 }

@@ -109,6 +109,7 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -614,7 +615,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(87, 75);
+            this.button4.Location = new System.Drawing.Point(18, 75);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(99, 28);
             this.button4.TabIndex = 2;
@@ -663,7 +664,7 @@
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Location = new System.Drawing.Point(280, 47);
+            this.groupBox1.Location = new System.Drawing.Point(268, 47);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(254, 69);
             this.groupBox1.TabIndex = 8;
@@ -680,7 +681,7 @@
             this.groupBox4.Controls.Add(this.button5);
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Location = new System.Drawing.Point(398, 161);
+            this.groupBox4.Location = new System.Drawing.Point(413, 161);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(373, 236);
             this.groupBox4.TabIndex = 10;
@@ -703,11 +704,11 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(48, 20);
+            this.label13.Location = new System.Drawing.Point(13, 20);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(45, 13);
+            this.label13.Size = new System.Drawing.Size(90, 13);
             this.label13.TabIndex = 7;
-            this.label13.Text = "Volume ";
+            this.label13.Text = "Volume Delivered";
             // 
             // label14
             // 
@@ -730,7 +731,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 55);
+            this.label18.Location = new System.Drawing.Point(20, 55);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(83, 13);
             this.label18.TabIndex = 11;
@@ -776,6 +777,7 @@
             this.button5.TabIndex = 2;
             this.button5.Text = "Start";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label8
             // 
@@ -798,7 +800,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(16, 27);
+            this.label19.Location = new System.Drawing.Point(15, 27);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(60, 13);
             this.label19.TabIndex = 11;
@@ -807,7 +809,7 @@
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(17, 43);
+            this.textBox5.Location = new System.Drawing.Point(18, 43);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(57, 20);
             this.textBox5.TabIndex = 12;
@@ -820,16 +822,16 @@
             this.groupBox6.Controls.Add(this.textBox5);
             this.groupBox6.Controls.Add(this.label19);
             this.groupBox6.Controls.Add(this.button4);
-            this.groupBox6.Location = new System.Drawing.Point(541, 48);
+            this.groupBox6.Location = new System.Drawing.Point(528, 48);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(230, 109);
+            this.groupBox6.Size = new System.Drawing.Size(258, 109);
             this.groupBox6.TabIndex = 13;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Actuator Jog Control";
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(98, 22);
+            this.button6.Location = new System.Drawing.Point(81, 40);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 13;
@@ -838,13 +840,18 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(98, 50);
+            this.button7.Location = new System.Drawing.Point(162, 40);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 14;
             this.button7.Text = "Jog -X";
             this.button7.UseVisualStyleBackColor = true;
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(826, 412);
@@ -968,6 +975,7 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
