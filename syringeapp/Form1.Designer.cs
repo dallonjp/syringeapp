@@ -60,6 +60,8 @@
             this.quarterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eighthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sixteenthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jogRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calibrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultSyringesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mLToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,8 +109,8 @@
             this.label19 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -158,7 +160,8 @@
             this.stepperToolStripMenuItem,
             this.defaultSyringesToolStripMenuItem,
             this.acuatorToolStripMenuItem,
-            this.microsteppingToolStripMenuItem});
+            this.microsteppingToolStripMenuItem,
+            this.jogRateToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -372,6 +375,21 @@
             this.sixteenthToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.sixteenthToolStripMenuItem.Text = "Sixteenth";
             this.sixteenthToolStripMenuItem.Click += new System.EventHandler(this.sixteenthToolStripMenuItem_Click);
+            // 
+            // jogRateToolStripMenuItem
+            // 
+            this.jogRateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeRateToolStripMenuItem});
+            this.jogRateToolStripMenuItem.Name = "jogRateToolStripMenuItem";
+            this.jogRateToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.jogRateToolStripMenuItem.Text = "Jog Rate";
+            // 
+            // changeRateToolStripMenuItem
+            // 
+            this.changeRateToolStripMenuItem.Name = "changeRateToolStripMenuItem";
+            this.changeRateToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.changeRateToolStripMenuItem.Text = "change rate";
+            this.changeRateToolStripMenuItem.Click += new System.EventHandler(this.changeRateToolStripMenuItem_Click);
             // 
             // calibrationToolStripMenuItem
             // 
@@ -829,15 +847,6 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Actuator Jog Control";
             // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(81, 40);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 13;
-            this.button6.Text = "Jog +X";
-            this.button6.UseVisualStyleBackColor = true;
-            // 
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(162, 40);
@@ -846,12 +855,23 @@
             this.button7.TabIndex = 14;
             this.button7.Text = "Jog -X";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(81, 40);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 13;
+            this.button6.Text = "Jog +X";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.WorkerSupportsCancellation = true;
-            
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(826, 412);
@@ -976,6 +996,8 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ToolStripMenuItem jogRateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeRateToolStripMenuItem;
     }
 }
 

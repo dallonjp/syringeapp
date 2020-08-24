@@ -17,16 +17,21 @@ namespace WindowsFormsApp1
         public static bool isPushedasp = false;
         public static bool isPushedinj = false;
         public static bool isPushedtimedinj = false;
+        public static bool isPushedjogplus = false;
+        public static bool isPushedjogminus = false;
         public static bool connected = false;
         public static bool ishomed = false;
         public static bool customaccel = false;
         public static bool aspirated = false;
         public static bool injected = false;
+        public static bool joggedplus = false;
+        public static bool joggedminus = false;
 
         public static char[] switchcode = { 'a', 'b', 'c', 'd', 'e','f' };
 
         public static double mmperstep = Properties.Settings.Default.pitch / ((360/Properties.Settings.Default.degree) * Properties.Settings.Default.microstp);
         public static double mlperstep=-1;
+        public static double mm;
         public static double rate;
         public static double outputrate;
         public static double outputposition;
@@ -57,7 +62,7 @@ namespace WindowsFormsApp1
             label6.Hide();
             label12.Hide();
             label16.Hide();
-            defaultStepsecToolStripMenuItem.Text = Properties.Settings.Default.accel.ToString();
+            defaultStepsecToolStripMenuItem.Text = Properties.Settings.Default.accel.ToString()+ " full steps/sec/sec";
             rotationPerStepdegreesToolStripMenuItem.Text = "Stepper degree: "+Properties.Settings.Default.degree.ToString();
             
             radioButton1.Text = Properties.Settings.Default.defaultml1.ToString() + " mL";
@@ -69,6 +74,7 @@ namespace WindowsFormsApp1
             mLToolStripMenuItem3.Text = Properties.Settings.Default.defaultml1.ToString() + " mL";
             mLToolStripMenuItem4.Text = Properties.Settings.Default.defaultml2.ToString() + " mL";
             mLToolStripMenuItem5.Text = Properties.Settings.Default.defaultml3.ToString() + " mL";
+            changeRateToolStripMenuItem.Text = Properties.Settings.Default.defaultrate.ToString()+" full steps/sec";
             pitchToolStripMenuItem.Text = "Ball screw pitch= " + Properties.Settings.Default.pitch.ToString() + " mm";
             innerDiameterToolStripMenuItem.Text = "Inner Diamter= " + Properties.Settings.Default.defaultid1.ToString() + " mm";
             innerDiameterToolStripMenuItem1.Text= "Inner Diamter= " + Properties.Settings.Default.defaultid2.ToString() + " mm";
@@ -230,7 +236,81 @@ namespace WindowsFormsApp1
                                     label12.Text = "Ready";
                                     label16.Visible = true;
                                     label16.Text = "0" + " mL";
+                                    int defaccel = (int)Math.Round(Properties.Settings.Default.accel, 0, MidpointRounding.AwayFromZero)*Properties.Settings.Default.microstp;
+                                    int defrate = (int)Math.Round(Properties.Settings.Default.defaultrate, 0, MidpointRounding.AwayFromZero) * Properties.Settings.Default.microstp;
+                                    string straccel = defaccel.ToString();
+                                    string strrate = defrate.ToString();
+                                    if (straccel.Length == 8)
+                                    {
+                                        contpsn = "x0" + straccel;
+                                    }
+                                    else if (straccel.Length == 7)
+                                    {
+                                        contpsn = "x00" + straccel;
+                                    }
+                                    else if (straccel.Length == 6)
+                                    {
+                                        contpsn = "x000" + straccel;
+                                    }
+                                    else if (straccel.Length == 5)
+                                    {
+                                        contpsn = "x0000" + straccel;
+                                    }
+                                    else if (straccel.Length == 4)
+                                    {
+                                        contpsn = "x00000" + straccel;
+                                    }
+                                    else if (straccel.Length == 3)
+                                    {
+                                        contpsn = "x000000" + straccel;
+                                    }
+                                    else if (straccel.Length == 2)
+                                    {
+                                        contpsn = "x0000000" + straccel;
+                                    }
+                                    else if (straccel.Length == 1)
+                                    {
+                                        contpsn = "x00000000" + straccel;
+                                    }
 
+                                    if (strrate.Length == 8)
+                                    {
+                                        contrt = "v0" + strrate;
+                                    }
+                                    else if (strrate.Length == 7)
+                                    {
+                                        contrt = "v00" + strrate;
+                                    }
+                                    else if (strrate.Length == 6)
+                                    {
+                                        contrt = "v000" + strrate;
+                                    }
+                                    else if (strrate.Length == 5)
+                                    {
+                                        contrt = "v0000" + strrate;
+                                    }
+                                    else if (strrate.Length == 4)
+                                    {
+                                        contrt = "v00000" + strrate;
+                                    }
+                                    else if (strrate.Length == 3)
+                                    {
+                                        contrt = "v000000" + strrate;
+                                    }
+                                    else if (strrate.Length == 2)
+                                    {
+                                        contrt = "v0000000" + strrate;
+                                    }
+                                    else if (strrate.Length == 1)
+                                    {
+                                        contrt = "v00000000" + strrate;
+                                    }
+                                    if ((contpsn.Length == 10) && (contrt.Length == 10))
+                                    {
+                                        sendit = contpsn + contrt;
+                                        byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
+                                        port1.Write(sendbytes, 0, sendbytes.Length);
+                                    }
                                 }
 
                             }
@@ -462,7 +542,7 @@ namespace WindowsFormsApp1
                                             
 
                                             int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
-                                            //position = position - actualposition;
+                                            
                                             string actpsn = actualposition.ToString();
 
                                             int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
@@ -527,11 +607,12 @@ namespace WindowsFormsApp1
                                                 port1.Write(sendbytes, 0, sendbytes.Length);
                                                 watch.Reset();
                                                 watch.Start();
-                                                int interval = actualposition / actualrate;
-                                                timer.Interval = interval * 1000; // 
+                                                intervalms = (actualposition / actualrate) * 1000;
+
+                                                timer.Interval = 1; // here time in milliseconds
                                                 timer.Tick += timer_Tick;
                                                 timer.Start();
-                                                
+
                                                 isPushedinj = true;
                                                 injected = true;
                                                 label16.Visible = true;
@@ -600,6 +681,318 @@ namespace WindowsFormsApp1
                     textBox2.Text = crntvlm.ToString();
                     label12.Text = "Ready";
                     isPushedinj = false;
+                }
+            }
+        }
+        private void button6_Click(object sender, EventArgs e)//-x direction jog
+        {
+            if (connected)
+            {
+
+                if (!isPushedjogplus)
+                {
+                    if (textBox5.TextLength > 0)
+                    {
+                        mm = ConvertToDouble(textBox5.Text);
+
+                        try
+                        {
+                            if (ishomed)
+                            {
+                                outputposition = mm / mmperstep;
+                                outputrate = Properties.Settings.Default.defaultrate * Properties.Settings.Default.microstp;
+
+
+                                if (position + outputposition <= maxsteps)
+                                {
+                                    double movetoposition = position + outputposition;
+
+
+                                    int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
+
+                                    string actpsn = actualposition.ToString();
+
+                                    int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
+                                    string actrt = actualrate.ToString();
+                                    if (actpsn.Length == 6)
+                                    {
+                                        contpsn = "x0" + actpsn;
+                                    }
+                                    else if (actpsn.Length == 5)
+                                    {
+                                        contpsn = "x00" + actpsn;
+                                    }
+                                    else if (actpsn.Length == 4)
+                                    {
+                                        contpsn = "x000" + actpsn;
+                                    }
+                                    else if (actpsn.Length == 3)
+                                    {
+                                        contpsn = "x0000" + actpsn;
+                                    }
+                                    else if (actpsn.Length == 2)
+                                    {
+                                        contpsn = "x00000" + actpsn;
+                                    }
+                                    else if (actpsn.Length == 1)
+                                    {
+                                        contpsn = "x000000" + actpsn;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Volume out of range!");
+                                    }
+                                    if (actrt.Length == 5)
+                                    {
+                                        contrt = "v0" + actrt;
+                                    }
+                                    else if (actrt.Length == 4)
+                                    {
+                                        contrt = "v00" + actrt;
+                                    }
+                                    else if (actrt.Length == 3)
+                                    {
+                                        contrt = "v000" + actrt;
+                                    }
+                                    else if (actrt.Length == 2)
+                                    {
+                                        contrt = "v0000" + actrt;
+                                    }
+                                    else if (actrt.Length == 1)
+                                    {
+                                        contrt = "v00000" + actrt;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Rate out of range!");
+                                    }
+                                    if ((contpsn.Length == 8) && (contrt.Length == 7))
+                                    {
+                                        sendit = contpsn + contrt + "x2";
+                                        port1.Write(switchcode, 2, 1);
+                                        byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
+                                        port1.Write(sendbytes, 0, sendbytes.Length);
+                                        watch.Reset();
+                                        watch.Start();
+                                        intervalms = (actualposition / actualrate) * 1000;
+
+                                        timer.Interval = 1; // here time in milliseconds
+                                        timer.Tick += timer_Tick;
+                                        timer.Start();
+                                        label12.Text = "Jogging";
+                                        isPushedjogplus = true;
+                                        joggedplus = true;
+                                        button1.Enabled = false;
+                                        button3.Enabled = false;
+                                        button6.Text = "Cancel";
+                                        button2.Enabled = false;
+                                        button4.Enabled = false;
+                                        button5.Enabled = false;
+                                        button6.Enabled = true;
+                                        button7.Enabled = false;
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Cannot move to that position!");
+                                }
+
+                            }
+                            else { MessageBox.Show("Position not zeroed!"); }
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid Input");
+                    }
+                }
+                else
+                {
+                    port1.Write(switchcode, 3, 1);
+
+                    button1.Enabled = true;
+                    button2.Enabled = true;
+                    button3.Enabled = true;
+                    button4.Enabled = true;
+                    button5.Enabled = true;
+                    button6.Enabled = true;
+                    button7.Enabled = true;
+                    button4.Enabled = true;
+                    joggedminus = false;
+                    long ms = watch.ElapsedMilliseconds;
+                    watch.Stop();
+                    timer.Stop();
+                    button6.Text = "Jog +X";
+                    label12.Text = "Ready";
+                    double ratepermilisec = rate / (1000 * 60);
+                    double vlm = ratepermilisec * ms;
+                    double stepstaken = vlm / mlperstep;
+                    position = position + stepstaken;
+
+                    isPushedjogplus = false;
+                }
+            }
+        }
+        private void button7_Click(object sender, EventArgs e)//-x direction jog
+        {
+            if (connected)
+            {
+                           
+                if (!isPushedjogminus)
+                {
+                    if (textBox5.TextLength > 0)
+                    {
+                        mm = ConvertToDouble(textBox5.Text);
+                        
+                        try
+                        {
+                                if (ishomed)
+                                {
+                                    outputposition = mm / mmperstep;
+                                    outputrate = Properties.Settings.Default.defaultrate * Properties.Settings.Default.microstp;
+
+
+                                if (position - outputposition >= 0)
+                                        {
+                                            double movetoposition = position - outputposition;
+
+
+                                            int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
+
+                                            string actpsn = actualposition.ToString();
+
+                                            int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
+                                            string actrt = actualrate.ToString();
+                                            if (actpsn.Length == 6)
+                                            {
+                                                contpsn = "x0" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 5)
+                                            {
+                                                contpsn = "x00" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 4)
+                                            {
+                                                contpsn = "x000" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 3)
+                                            {
+                                                contpsn = "x0000" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 2)
+                                            {
+                                                contpsn = "x00000" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 1)
+                                            {
+                                                contpsn = "x000000" + actpsn;
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Volume out of range!");
+                                            }
+                                            if (actrt.Length == 5)
+                                            {
+                                                contrt = "v0" + actrt;
+                                            }
+                                            else if (actrt.Length == 4)
+                                            {
+                                                contrt = "v00" + actrt;
+                                            }
+                                            else if (actrt.Length == 3)
+                                            {
+                                                contrt = "v000" + actrt;
+                                            }
+                                            else if (actrt.Length == 2)
+                                            {
+                                                contrt = "v0000" + actrt;
+                                            }
+                                            else if (actrt.Length == 1)
+                                            {
+                                                contrt = "v00000" + actrt;
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Rate out of range!");
+                                            }
+                                            if ((contpsn.Length == 8) && (contrt.Length == 7))
+                                            {
+                                                sendit = contpsn + contrt + "x2";
+                                                port1.Write(switchcode, 2, 1);
+                                                byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
+                                                port1.Write(sendbytes, 0, sendbytes.Length);
+                                                watch.Reset();
+                                                watch.Start();
+                                                intervalms = (actualposition / actualrate) * 1000;
+
+                                                timer.Interval = 1; // here time in milliseconds
+                                                timer.Tick += timer_Tick;
+                                                timer.Start();
+                                                label12.Text = "Jogging";
+                                                isPushedjogminus = true;
+                                                joggedminus = true;
+                                                button1.Enabled = false;
+                                                button3.Enabled = false;
+                                                button7.Text = "Cancel";
+                                                button2.Enabled = false;
+                                                button4.Enabled = false;
+                                                button5.Enabled = false;
+                                                button6.Enabled = false;
+                                                button7.Enabled = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Cannot move to that position!");
+                                        }
+
+                                }
+                                else { MessageBox.Show("Position not zeroed!"); }
+                           
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid Input");
+                    }
+                }
+                else
+                {
+                    port1.Write(switchcode, 3, 1);
+                    
+                    button1.Enabled = true;
+                    button2.Enabled = true;
+                    button3.Enabled = true;
+                    button4.Enabled = true;
+                    button5.Enabled = true;
+                    button6.Enabled = true;
+                    button7.Enabled = true;
+                    button4.Enabled = true;
+                    joggedminus = false;
+                    long ms = watch.ElapsedMilliseconds;
+                    watch.Stop();
+                    timer.Stop();
+                    button7.Text = "Jog -X";
+                    label12.Text = "Ready";
+                    double ratepermilisec = rate / (1000 * 60);
+                    double vlm = ratepermilisec * ms;
+                    double stepstaken = vlm / mlperstep;
+                    position = position - stepstaken;
+
+                    isPushedjogminus = false;
                 }
             }
         }
@@ -922,7 +1315,7 @@ namespace WindowsFormsApp1
                     double newaccel = ConvertToDouble(usrinput);
                     Properties.Settings.Default.accel = newaccel;
                     Properties.Settings.Default.Save();
-                    defaultStepsecToolStripMenuItem.Text =usrinput;
+                    defaultStepsecToolStripMenuItem.Text =usrinput + " full steps/sec/sec";
                     if (newaccel > 0)
                     {
                         int actualaccel = (int)Math.Round(newaccel, 0, MidpointRounding.AwayFromZero) *Properties.Settings.Default.microstp;
@@ -1010,6 +1403,13 @@ namespace WindowsFormsApp1
                     Math.Round(displayvlm, 4, MidpointRounding.AwayFromZero);
                     label16.Text = displayvlm.ToString() + " mL";
                     label16.Refresh();
+                    label17.Text = newvlm.ToString();
+                    label14.Text = (watch.ElapsedMilliseconds / 60000).ToString();
+                    double timepassed = ms / 60000;
+                    double timeleft = (intervalms / 60000) - timepassed;
+                    timeleft = Math.Round(timeleft, 6, MidpointRounding.AwayFromZero);
+                    label14.Text = timeleft.ToString() + " min";
+                    label14.Refresh();
                 }
             }
             else
@@ -1023,9 +1423,13 @@ namespace WindowsFormsApp1
                 button7.Enabled = true;
                 isPushedasp = false;
                 isPushedinj = false;
+                isPushedjogplus = false;
+                isPushedjogminus = false;
                 button2.Text = "Aspirate";
                 button3.Text = "Inject";
-                
+                button5.Text = "Start";
+                button7.Text = "Jog -X";
+                button6.Text = "Jog +X";
                 label12.Text = "Ready";
                 timer.Stop();
                 watch.Stop();
@@ -1042,9 +1446,18 @@ namespace WindowsFormsApp1
                     crntvlm = position * mlperstep;
                     label16.Text = crntvlm.ToString() + " mL";
                     textBox2.Text = crntvlm.ToString();
+                }else if (joggedplus)
+                {
+                    position = position + outputposition;
+                }
+                else if (joggedminus)
+                {
+                    position = position - outputposition;
                 }
                 aspirated = false;
                 injected = false;
+                joggedminus = false;
+                joggedplus = false;
             }
         }
         void timer_Tick2(object sender, System.EventArgs e)
@@ -1396,7 +1809,7 @@ namespace WindowsFormsApp1
             
             if (connected)
             {
-                if (!isPushedtimedinj)
+                if (!isPushedinj)
                 {
                     if ((textBox1.TextLength > 0) && (textBox4.TextLength > 0))
                     {
@@ -1407,113 +1820,107 @@ namespace WindowsFormsApp1
                         {
                             if ((mlperstep != -1) && (maxsteps != -1))
                             {
-                            if (ishomed)
-                            {
-                                outputposition = vlm / mlperstep;
-                                    double periodmin = (minutes/outputposition);
+                                if (ishomed)
+                                {
+                                    outputposition = vlm / mlperstep;
+                                    double periodmin = (minutes / outputposition);
                                     periodms = periodmin * 60000;
                                     intervalms = minutes * 60000;
+                                    outputrate = outputposition / (minutes * 60);
                                     periodms = (int)Math.Round(periodms, 0, MidpointRounding.AwayFromZero);
                                     int intervalmsrnd = (int)Math.Round(intervalms, 0, MidpointRounding.AwayFromZero);
-                                    if ((periodms >= 1) && (intervalms<99999999))
-                                    {
+                                    if (rate >= 1) {
                                         if (position - outputposition >= 0)
                                         {
                                             double movetoposition = position - outputposition;
-                                            
-                                            string actperiodms = periodms.ToString();
-                                            string actinterval = intervalmsrnd.ToString();
-                                            if (actperiodms.Length == 8)
-                                            {
-                                                contpsn = "x0" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 7)
-                                            {
-                                                contpsn = "x00" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 6)
-                                            {
-                                                contpsn = "x000" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 5)
-                                            {
-                                                contpsn = "x0000" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 4)
-                                            {
-                                                contpsn = "x00000" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 3)
-                                            {
-                                                contpsn = "x000000" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 2)
-                                            {
-                                                contpsn = "x0000000" + actperiodms;
-                                            }
-                                            else if (actperiodms.Length == 1)
-                                            {
-                                                contpsn = "x00000000" + actperiodms;
-                                            }
+                                            outputrate = outputposition / (minutes * 60);
 
-                                            if (actinterval.Length == 8)
-                                            {
-                                                contrt = "v0" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 7)
-                                            {
-                                                contrt = "v00" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 6)
-                                            {
-                                                contrt = "v000" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 5)
-                                            {
-                                                contrt = "v0000" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 4)
-                                            {
-                                                contrt = "v00000" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 3)
-                                            {
-                                                contrt = "v000000" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 2)
-                                            {
-                                                contrt = "v0000000" + actinterval;
-                                            }
-                                            else if (actinterval.Length == 1)
-                                            {
-                                                contrt = "v00000000" + actinterval;
-                                            }
-                                            if ((contpsn.Length == 10) && (contrt.Length == 10))
-                                            {
-                                                sendit = contpsn + contrt;
-                                                port1.Write(switchcode, 5, 1);
+                                            int actualposition = (int)Math.Round(outputposition, 0, MidpointRounding.AwayFromZero);
 
+                                            string actpsn = actualposition.ToString();
+
+                                            int actualrate = (int)Math.Round(outputrate, 0, MidpointRounding.AwayFromZero);
+                                            string actrt = actualrate.ToString();
+                                            if (actpsn.Length == 6)
+                                            {
+                                                contpsn = "x0" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 5)
+                                            {
+                                                contpsn = "x00" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 4)
+                                            {
+                                                contpsn = "x000" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 3)
+                                            {
+                                                contpsn = "x0000" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 2)
+                                            {
+                                                contpsn = "x00000" + actpsn;
+                                            }
+                                            else if (actpsn.Length == 1)
+                                            {
+                                                contpsn = "x000000" + actpsn;
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Volume out of range!");
+                                            }
+                                            if (actrt.Length == 5)
+                                            {
+                                                contrt = "v0" + actrt;
+                                            }
+                                            else if (actrt.Length == 4)
+                                            {
+                                                contrt = "v00" + actrt;
+                                            }
+                                            else if (actrt.Length == 3)
+                                            {
+                                                contrt = "v000" + actrt;
+                                            }
+                                            else if (actrt.Length == 2)
+                                            {
+                                                contrt = "v0000" + actrt;
+                                            }
+                                            else if (actrt.Length == 1)
+                                            {
+                                                contrt = "v00000" + actrt;
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Rate out of range!");
+                                            }
+                                            if ((contpsn.Length == 8) && (contrt.Length == 7))
+                                            {
+                                                sendit = contpsn + contrt + "x2";
+                                                port1.Write(switchcode, 2, 1);
                                                 byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
                                                 port1.Write(sendbytes, 0, sendbytes.Length);
-                                                watch2.Reset();
-                                                watch2.Start();
+                                                watch.Reset();
+                                                watch.Start();
                                                 
-                                                timer2.Interval = (int)periodms; // 
-                                                timer2.Tick += timer_Tick2;
-                                                timer2.Start();
-                                                
-                                                isPushedtimedinj = true;
+                                                timer.Interval = 1; // 
+                                                timer.Tick += timer_Tick;
+                                                timer.Start();
+
+                                                isPushedinj = true;
+                                                injected = true;
+                                                label16.Visible = true;
+                                                label12.Visible = true;
                                                 label12.Text = "Injecting";
                                                 button1.Enabled = false;
-                                                button3.Enabled = false;
                                                 button5.Text = "Cancel";
                                                 button2.Enabled = false;
+                                                button3.Enabled = false;
                                                 button4.Enabled = false;
+                                                button5.Enabled = true;
                                                 button6.Enabled = false;
                                                 button7.Enabled = false;
                                                 label17.Visible = true;
                                                 label14.Visible = true;
-
                                             }
                                         }
                                         else
@@ -1521,8 +1928,119 @@ namespace WindowsFormsApp1
                                             MessageBox.Show("Injected volume would be bigger than current volume! :(");
                                         }
                                     }
-                                    else { MessageBox.Show("Invalid time"); }
+                                    else
+                                    {
+                                        if ((periodms >= 1) && (intervalms < 99999999))
+                                        {
+                                            if (position - outputposition >= 0)
+                                            {
+                                                double movetoposition = position - outputposition;
+
+                                                string actperiodms = periodms.ToString();
+                                                string actinterval = intervalmsrnd.ToString();
+                                                if (actperiodms.Length == 8)
+                                                {
+                                                    contpsn = "x0" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 7)
+                                                {
+                                                    contpsn = "x00" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 6)
+                                                {
+                                                    contpsn = "x000" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 5)
+                                                {
+                                                    contpsn = "x0000" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 4)
+                                                {
+                                                    contpsn = "x00000" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 3)
+                                                {
+                                                    contpsn = "x000000" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 2)
+                                                {
+                                                    contpsn = "x0000000" + actperiodms;
+                                                }
+                                                else if (actperiodms.Length == 1)
+                                                {
+                                                    contpsn = "x00000000" + actperiodms;
+                                                }
+
+                                                if (actinterval.Length == 8)
+                                                {
+                                                    contrt = "v0" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 7)
+                                                {
+                                                    contrt = "v00" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 6)
+                                                {
+                                                    contrt = "v000" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 5)
+                                                {
+                                                    contrt = "v0000" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 4)
+                                                {
+                                                    contrt = "v00000" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 3)
+                                                {
+                                                    contrt = "v000000" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 2)
+                                                {
+                                                    contrt = "v0000000" + actinterval;
+                                                }
+                                                else if (actinterval.Length == 1)
+                                                {
+                                                    contrt = "v00000000" + actinterval;
+                                                }
+                                                if ((contpsn.Length == 10) && (contrt.Length == 10))
+                                                {
+                                                    sendit = contpsn + contrt;
+                                                    //MessageBox.Show(sendit.ToString());
+                                                    port1.Write(switchcode, 5, 1);
+
+                                                    byte[] sendbytes = Encoding.GetEncoding("ASCII").GetBytes(sendit);
+                                                    port1.Write(sendbytes, 0, sendbytes.Length);
+                                                    watch.Reset();
+                                                    watch.Start();
+
+                                                    timer.Interval = (int)periodms; // 
+                                                    timer.Tick += timer_Tick;
+                                                    timer.Start();
+                                                    injected = true;
+                                                    isPushedinj = true;
+                                                    label12.Text = "Injecting";
+                                                    button1.Enabled = false;
+                                                    button3.Enabled = false;
+                                                    button5.Text = "Cancel";
+                                                    button2.Enabled = false;
+                                                    button4.Enabled = false;
+                                                    button6.Enabled = false;
+                                                    button7.Enabled = false;
+                                                    label17.Visible = true;
+                                                    label14.Visible = true;
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Injected volume would be bigger than current volume! :(");
+                                            }
+
+                                        }
+                                        else { MessageBox.Show("Invalid time"); }
                                     }
+                                }
                                 else { MessageBox.Show("Pump position not zeroed!"); }
                             }
                             else { MessageBox.Show("No Syringe Chosen!"); }
@@ -1549,24 +2067,33 @@ namespace WindowsFormsApp1
                     button7.Enabled = true;
                     isPushedtimedinj = false;                    
                     label12.Text = "Ready";
-                    double timedrate = vlm / intervalms;
-                    long ms = watch2.ElapsedMilliseconds;
-                    double newvlm = timedrate * ms;
-                    timer2.Stop();
-                    watch2.Stop();
-                    
-                    double stepstaken = newvlm / mlperstep;
-                    position = -- stepstaken;
-                    double newvlm2 = position * mlperstep;
-                    crntvlm = Math.Round(newvlm2, 4, MidpointRounding.AwayFromZero);
-                    label16.Visible = true;
-                    label16.Text = crntvlm.ToString() + " mL";
-                    label17.Visible = false;
-                    label14.Visible = false;
+                    if (isPushedinj) {
+                        injected = false;
+                        long ms = watch.ElapsedMilliseconds;
+                        watch.Stop();
+                        timer.Stop();
+
+                        double stepspermilisec = outputrate / (1000);
+                        double stepstaken = stepspermilisec * ms;
+                        //double newvlm = stepstaken* mlperstep;
+                        position = position - stepstaken;
+                        double newvlm = position * mlperstep;
+                        crntvlm = Math.Round(newvlm, 4, MidpointRounding.AwayFromZero);
+
+                        label16.Text = crntvlm.ToString() + " mL";
+                        //textBox2.Text = crntvlm.ToString();
+                        label12.Text = "Ready";
+                        isPushedinj = false;
+                    }
+
                 }
 
             }
         }
 
+        private void changeRateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
